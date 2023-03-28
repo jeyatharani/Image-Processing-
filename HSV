@@ -1,0 +1,28 @@
+import cv2 as cv
+import numpy as np
+from google.colab.patches import cv2_imshow   ##To display images using OpenCV 
+
+from google.colab import drive
+drive.mount('../drive')
+
+z = cv.imread(r'../drive/MyDrive/test_images/f.PNG')  ## read image
+hsv = cv.cvtColor(z, cv.COLOR_BGR2HSV)  ## BGR color space to the HSV color space.
+
+## BGR: three channels: blue, green, and red. 
+## HSV color space represents colors based on their hue, saturation, and value. 
+## Hue describes the color itself (e.g., red, blue, yellow).
+## saturation represents the purity of the color (i.e., how much white is mixed in).
+## value represents the brightness of the color.
+
+#mask = cv2.inRange(hsv, (36, 25, 25), (86, 255,255))
+mask = cv.inRange(hsv, (36, 25, 25), (86, 255,255))
+
+## slice the green
+imask = mask>0
+green = np.zeros_like(z, np.uint8)
+green[imask] = z[imask]
+
+
+## save 
+cv.imwrite("green.png", green)
+cv2_imshow(green)
